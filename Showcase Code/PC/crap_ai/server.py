@@ -2,10 +2,15 @@ from email import message
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import time
 
-# HTTPRequestHandler class
-class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
-  # GET
+
+class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
+  """
+  HTTPRequestHandler class
+  Initalizes class for use in HTTP server, in order to send the chess board as a header to front-end. Link to HTTP Server Doc: https://docs.python.org/3/library/http.server.html#http.server.HTTPServer
+  """
+
+  # GET is a standard method for requested HTTP server class
   def do_GET(self):
     # Send response status code
     self.send_response(200)
@@ -27,7 +32,7 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
       , 'utf8')
 
     # Send headers
-    self.send_header('Content-type','text/plain; charset=utf-8')
+    self.send_header('Content-type','text/plain; charset=utf-8') # HTTP Header defining characterset and
     self.send_header('Content-length', str(len(message)))
     self.end_headers()
 

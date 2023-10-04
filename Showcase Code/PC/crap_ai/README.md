@@ -5,3 +5,4 @@ Fork of the RoboSoc "Arm Chess Bot" (C.R.A.P) Repository for the current year 20
 Working on:
 
 * Documentation 
+* Error Handling for Server
