@@ -1,10 +1,10 @@
 import requests
 
 
-DEFAULT_WEBSERVER = "http://127.0.0.1:5000"
+DEFAULT_WEBSERVER = "http://127.0.0.1:5000" # Default port for localhost 
 
 
-def convert_to_fen(board):
+def convert_to_fen(board): # Converts to Forsyth–Edwards Notation such that the read piece is equal to the piece name in FEN, FEN Notation: https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation
     peice_conversion = {
         "BK": "k",
         "BQ": "q",
@@ -18,7 +18,7 @@ def convert_to_fen(board):
         "WN": "N",
         "WR": "R",
         "WP": "P"
-    }
+    } # Dictionary of values such that each piece on the server board 
 
     fen = ""
     for x in range(8):
