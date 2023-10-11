@@ -6,3 +6,13 @@ Working on:
 
 * Documentation 
 * Error Handling for Server
+
+Distribution of Work: 
+* Multiple people to work on the main.py
+* Individual work in spare time
+
+Group Documentation:
+* ChessAI/Chess-AI-master/main.py
+
+Individual Documentation:
+* Server.py
