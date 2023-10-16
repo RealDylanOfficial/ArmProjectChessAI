@@ -40,11 +40,12 @@ def convert_to_fen(board): # Converts to Forsyth–Edwards Notation such that th
     fen += " b KQkq - 0 1"
     return fen
 
-
+#Return a 2D list representing the board game. Using "upstream" as the variable for the URL of the "DEFAULT_WEBSERVER", this function takes board game data from the web server URL
+#to represent the board's rows as a set of sublists.
 def read_board_network(upstream=DEFAULT_WEBSERVER):
-    resp = requests.get(upstream, timeout=0.25)
-    text = resp.content.decode("latin-1").strip().split("\n")
-    board = [i.split() for i in text]
+    resp = requests.get(upstream, timeout=0.25) #Feched the data from the web server. Isn't the timeout too short? What is the purpose of the timeout in general?
+    text = resp.content.decode("latin-1").strip().split("\n") #Decodes the content from "Latin-1" encoding (which represents western alphabets), removes trailing spaces and creates substrings for every newline character
+    board = [i.split() for i in text] #Makes every substring into a sublist to represent the rows of the board
     return board
 
 
