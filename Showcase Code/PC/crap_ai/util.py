@@ -48,15 +48,15 @@ def read_board_network(upstream=DEFAULT_WEBSERVER):
     board = [i.split() for i in text] #Makes every substring into a sublist to represent the rows of the board
     return board
 
-
+#Creates a matrix representation of the board as a set of lists
 def read_board(filename):
     board_matrix = []
-    with open(filename, "r") as f:
+    with open(filename, "r") as f: #Opens up a file and fetches its content as it set the mode to read (r)
         for line in f:
-            line_matrix = []
+            line_matrix = [] #Discards previous values and creates a new list for every row of the chess table
             for word in line.split():
-                line_matrix.append(word)
-            board_matrix.append(line_matrix)
+                line_matrix.append(word) #After splitting the row into the individual blocks, they are added individually
+            board_matrix.append(line_matrix) #The individual blocks (elements) are added the board matrix
 
     return board_matrix
 
