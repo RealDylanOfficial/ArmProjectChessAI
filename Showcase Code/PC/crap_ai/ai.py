@@ -5,7 +5,7 @@ from . import tables
 from . import util
 
 
-class AI_AlphaBeta:
+class AI_AlphaBeta: # Class for calculating the best move
     INFINITE = 10000000
     PIECE_VALUES = [0, 100, 300, 330, 500, 900, INFINITE]
     boards_evaluated = 0
