@@ -4,16 +4,17 @@ import chess.polyglot
 from . import tables
 from . import util
 
-
+# REMOVE THIS: This is doing alpha-beta pruning to make the best decision
+# Alpha-beta pruning is 
 class AI_AlphaBeta: # Class for calculating the best move
-    INFINITE = 10000000
-    PIECE_VALUES = [0, 100, 300, 330, 500, 900, INFINITE]
-    boards_evaluated = 0
+    INFINITE = 10000000 
+    PIECE_VALUES = [0, 100, 300, 330, 500, 900, INFINITE] #Sets out numerical "value" to pieces.
+    boards_evaluated = 0 # Maybe the number of trials the ai has completed   CHECK THIS AGAIN
 
-    def __init__(self):
-        pass
+    def __init__(self):  # Classes need to be initialized. This class is used for a set of functions.
+        pass #"pass" is run so there is no error if the function is empty.
 
-    def get_move(self, board, depth):
+    def get_move(self, board, depth): # 
         best_eval = -self.INFINITE
         self.boards_evaluated = 0
 
