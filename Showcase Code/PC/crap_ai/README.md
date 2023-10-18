@@ -20,10 +20,13 @@ Distribution of Work:
 * Individual work in spare time
 
 Group Documentation:
-* ChessAI/Chess-AI-master/main.py
+* 
 
 Individual Documentation:
 * Server.py - Ben - FINISHED 
 * ai.py - Santiago 
+* Showcase Code/PC/main.py - Ben
+* Showcase Code/PC/crap_ai/main.py - Ben
 
+If any individual wishes to be added to another individual's file which is already being worked on, see rudeeyonker (Dylan) or Ciph#6918 (Ben) on Discord such that it may be switched to a group collaboration.  
 
