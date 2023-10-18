@@ -23,6 +23,7 @@ Group Documentation:
 * ChessAI/Chess-AI-master/main.py
 
 Individual Documentation:
-* Server.py
+* Server.py - Ben
+* ai.py - Santiago 
 
 
