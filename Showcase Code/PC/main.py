@@ -239,17 +239,17 @@ class CRAPController:
             if self.message:
                 self.statusbar.configure(text=self.message)
 
-            try: # Read board given self.message 
+            try: # read_board_network (from crap_ai) given self.message, argument of the server port (typically 5000), returns a list representing the board
                 board = read_board_network(self.UPSTREAM)
-            except Exception: # Exception if no board given
+            except Exception: # If error board is not implemented
                 board = None
 
             if self.crap is None:
-                try:
+                try: # CRAP from crap_arm, self.got_message equal to date, time + input message which is ?
                     self.crap = CRAP(msg_handler=self.got_message)
                 except serial.serialutil.SerialException:
                     pass
-
+            # If not busy or empty pings (CRAP.send puts 0x7f in pkt byte array and writes pkt to serial)
             if self.crap is not None and not self.arm_busy:
                 try:
                     self.crap.ping()
