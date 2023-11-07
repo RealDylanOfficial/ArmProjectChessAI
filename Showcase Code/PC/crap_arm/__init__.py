@@ -45,7 +45,7 @@ class CRAP:
             bytesize=self.BYTESIZE,
             parity=self.PARITY,
             stopbits=self.STOPBITS
-        )
+        ) # Serial port for controller - opened on object creation. Documentation: https://pyserial.readthedocs.io/en/latest/pyserial_api.html
 
         self.msg_handler = msg_handler
 
