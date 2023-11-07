@@ -239,9 +239,9 @@ class CRAPController:
             if self.message:
                 self.statusbar.configure(text=self.message)
 
-            try:
+            try: # Read board given self.message 
                 board = read_board_network(self.UPSTREAM)
-            except Exception:
+            except Exception: # Exception if no board given
                 board = None
 
             if self.crap is None:
@@ -313,5 +313,5 @@ class CRAPController:
             self.calib.tk.destroy()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # Starts the program
     CRAPController().main()
