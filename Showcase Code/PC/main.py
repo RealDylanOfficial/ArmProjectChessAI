@@ -49,7 +49,7 @@ class CRAPController:
     def __init__(self):
         self.calib = CRAPCalibration(self)
 
-        self.tk = Tk()
+        self.tk = Tk() # Establishes tkinter window
         self.tk.title("CRAP Controller")
         self.tk.resizable(False, False)
         self.tk.protocol("WM_DELETE_WINDOW", self._tk_delete)
@@ -61,16 +61,16 @@ class CRAPController:
         self.message = None
 
         chess_frame = Frame(self.tk)
-        self._make_chess(chess_frame)
-        chess_frame.grid(row=0, column=0)
+        self._make_chess(chess_frame) # Main tkinter window chess board
+        chess_frame.grid(row=0, column=0) # Formats chess frame to be top-left of the window
 
         ai_frame = Frame(self.tk)
-        self._make_ai(ai_frame)
-        ai_frame.grid(row=0, column=1, sticky="N")
+        self._make_ai(ai_frame) # Main tkinter window AI config 
+        ai_frame.grid(row=0, column=1, sticky="N") # Formats to middle of tkinter window
 
         arm_frame = Frame(self.tk)
         self._make_arm(arm_frame)
-        arm_frame.grid(row=0, column=2, sticky="N")
+        arm_frame.grid(row=0, column=2, sticky="N") 
 
         self.thinking = False
         self.move = None
@@ -85,7 +85,7 @@ class CRAPController:
         self.running = False
         self.tk = None
 
-    def _make_chess(self, frame):
+    def _make_chess(self, frame): # Defines the tkinter grid for the chess board + the status lines at the bottom. 
         self.chess_tiles = {}
 
         for y in range(8):
@@ -99,14 +99,16 @@ class CRAPController:
         Label(frame, text=self.UPSTREAM).grid(row=9, column=0, columnspan=8)
 
     def _make_ai(self, frame):
-        Label(frame, text="CRAP AI", font=FONT).pack()
+        Label(frame, text="CRAP AI", font=FONT).pack() # Defines tkinter section for making AI move (middle row)
         self.ai_status = Label(frame, **AI_STATE["idle"], width=16, font=FONT)
-        self.ai_status.pack()
+        self.ai_status.pack() # Next available space
         self.ai_move = Label(frame)
         self.ai_move.pack()
         self.ai_extra = Label(frame)
         self.ai_extra.pack()
 
+        # Sets buttons for AI section of GUI 
+        
         self.ai_button = Button(frame, command=self.make_ai_move, text="Get AI Move")
         self.ai_button.pack()
         self.arm_button = Button(frame, command=self.make_arm_move, text="Perform AI Move", state="disabled")
@@ -257,7 +259,7 @@ class CRAPController:
                     self.crap = None
 
             if self.crap is None:
-                self.arm_stat.configure(**ARM_STATE["discon"])
+                self.arm_stat.configure(**ARM_STATE["discon"]) # Sets arm_stat to to disconnected.
                 for i in self.arm_controls:
                     i.configure(state="disabled")
             else:
