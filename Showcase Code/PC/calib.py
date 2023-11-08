@@ -35,7 +35,7 @@ class CRAPCalibration:
 
         self.positions = {}
         self.load()
-
+        # Tkinter calibration window
         self.tk = Tk()
         self.tk.title("CRAP Calibrator")
         self.tk.resizable(False, False)
