@@ -7,6 +7,18 @@ from crap_ai.ai import AI_AlphaBeta
 from crap_ai.util import read_board_network, convert_to_fen
 import sys
 
+def game_state(board):
+  
+  if board.is_variant_end():
+    return("VARIENTEND")
+  elif board.is_stalemate():
+    return "STALEMATE"
+  elif board.is_checkmate():
+    return "CHECKMATE"
+  elif board.is_game_over():
+    return "GAMEOVER"
+  return "CONTINUE"
+
 ##############
 # set to true if you're debugging and not running it via the console
 debugging = False
@@ -17,14 +29,14 @@ depth = 4
 
 if len(sys.argv) < 3 and debugging == False:
   print("Usage: python ai_test.py <agent_type> <search_depth>")
-  print("Agent types: random, human")
+  print("Agent types: random, human, AI")
   sys.exit(1)
 elif debugging == False:
   agent_type = sys.argv[1].lower()
   depth = int(sys.argv[2].lower())
 
-if agent_type not in ["random", "human", "console"]:
-    print("Invalid agent type. Please choose 'random' or 'human'.")
+if agent_type not in ["random", "human", "console", "ai"]:
+    print("Invalid agent type. Please choose 'random', 'human' or 'AI'.")
     sys.exit(1)
 
 
@@ -38,7 +50,10 @@ board = [["BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR"],
     ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
     ["WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"]]
 
-alphabeta_ai = AI_AlphaBeta()
+alphabeta_ai = AI_AlphaBeta(colour=True)
+
+if agent_type == "ai":
+  alphabeta_ai2 = AI_AlphaBeta(colour=False)
 
 #alphabeta_ai = ai.AI_AlphaBeta()
 
@@ -66,6 +81,11 @@ while True:
      moves.append(x)
     move = random.choice(moves)
     print(move)
+  elif agent_type == "ai":
+    move = alphabeta_ai2.get_move(board, depth)
+    print(move)
+
+    
 
 
   # webserver input
@@ -73,7 +93,17 @@ while True:
   
   board.push(move)
   print(board)
-
+  
+  if board.is_check():
+    print("CHECK")
+    
+  if board.is_repetition():
+    print("REPETITION")
+  
+  if game_state(board) != "CONTINUE":
+    print(board.result())
+    print(game_state(board))
+    break
   # ai move
 
   start_time = time.time()
@@ -83,5 +113,18 @@ while True:
   board.push(ai_move)
   print(board)
   print("================================")
+  if board.is_check():
+    print("CHECK")
+    
+  if board.is_repetition():
+    print("REPETITION")
+  
+  if game_state(board) != "CONTINUE":
+    print(board.result())
+    print(game_state(board))
+    break
+  
 
   # time.sleep(1)
+
+

@@ -9,8 +9,10 @@ class AI_AlphaBeta: # Class for calculating the best move
     INFINITE = 10000000
     PIECE_VALUES = [0, 100, 300, 330, 500, 900, INFINITE]
     boards_evaluated = 0
+    # piece values for second evaluation solution:
+    piece_values = {"p":1, "k":10, "b":5, "r":5, "q":8, "n":4}
 
-    def __init__(self):
+    def __init__(self, colour=None):
         pass
 
     def get_move(self, board, depth):
@@ -34,11 +36,14 @@ class AI_AlphaBeta: # Class for calculating the best move
             board.pop()
 
         return best_move
+    
+    def minimax(self, depth, board, is_maximizing):
+        pass
 
     def alphabeta(self, board, depth, alpha, beta):
         if depth == 0:
             self.boards_evaluated += 1
-            return self.evaluate(board)
+            return self.evaluate2(board)
 
         moves = list(board.legal_moves)
         moves = self.order_moves(board, moves)
@@ -72,6 +77,29 @@ class AI_AlphaBeta: # Class for calculating the best move
                     value -= tables.PIECE_TABLE[piece.piece_type][int(i/8)][i%8]
 
         return value
+    
+    def evaluate2(self, board: chess.Board):
+        value = 0
+        for i in range(64):
+            piece = board.piece_at(i)
+            if piece is not None:
+                if piece.color == board.turn:
+                    symbol = piece.symbol().lower()
+                    value += self.piece_values[symbol]
+                else:
+                    symbol = piece.symbol().lower()
+                    value -= self.piece_values[symbol]
+        if board.is_checkmate() and board.outcome().winner != board.turn:
+            print("test1")
+            return 100000
+        if board.is_game_over() and board.outcome().winner == board.turn or board.is_repetition():
+            print("test2")
+            return -100000
+        
+                    
+        return value
+                
+        
 
     def test_openings(self, board):
         with chess.polyglot.open_reader("data/polyglot/performance.bin") as reader:
