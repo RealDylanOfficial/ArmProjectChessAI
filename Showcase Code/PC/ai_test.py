@@ -7,6 +7,17 @@ from crap_ai.ai import AI_AlphaBeta
 from crap_ai.util import read_board_network, convert_to_fen
 import sys
 
+# 8 | r  n  b  q  k  b  n  r
+# 7 | p  p  p  p  p  p  p  p
+# 6 | .  .  .  .  .  .  .  .
+# 5 | .  .  .  .  .  .  .  .
+# 4 | .  .  .  .  .  .  .  .
+# 3 | .  .  .  .  .  .  .  .
+# 2 | P  P  P  P  P  P  P  P
+# 1 | R  N  B  Q  K  B  N  R
+#     a  b  c  d  e  f  g  h
+
+
 def game_state(board):
   
   if board.is_variant_end():
@@ -40,7 +51,7 @@ if agent_type not in ["random", "human", "console", "ai"]:
     sys.exit(1)
 
 
-
+# black is lowercase
 board = [["BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR"],
     ["BP", "BP", "BP", "BP", "BP", "BP", "BP", "BP"],
     ["..", "..", "..", "..", "..", "..", "..", ".."],
@@ -61,6 +72,28 @@ board = chess.Board(convert_to_fen(board))
 print(board)
 
 while True:
+    # ai move
+
+  start_time = time.time()
+  ai_move = alphabeta_ai.get_move(board, depth)
+  print("--- %s seconds ---" % (time.time() - start_time))
+  print(ai_move)
+  board.push(ai_move)
+  print(board)
+  print("================================")
+  if board.is_check():
+    print("CHECK")
+    
+  if board.is_repetition():
+    print("REPETITION")
+  
+  if game_state(board) != "CONTINUE":
+    print(board.result())
+    print(game_state(board))
+    break
+  
+  # user selected agent move
+  
   if agent_type == "" or agent_type == "console" or agent_type == "human":
     # console input
     while True:
@@ -104,25 +137,7 @@ while True:
     print(board.result())
     print(game_state(board))
     break
-  # ai move
 
-  start_time = time.time()
-  ai_move = alphabeta_ai.get_move(board, depth)
-  print("--- %s seconds ---" % (time.time() - start_time))
-  print(ai_move)
-  board.push(ai_move)
-  print(board)
-  print("================================")
-  if board.is_check():
-    print("CHECK")
-    
-  if board.is_repetition():
-    print("REPETITION")
-  
-  if game_state(board) != "CONTINUE":
-    print(board.result())
-    print(game_state(board))
-    break
   
 
   # time.sleep(1)

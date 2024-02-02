@@ -1,5 +1,6 @@
 import chess
 import chess.polyglot
+from . import heuristics
 
 from . import tables
 from . import util
@@ -43,7 +44,7 @@ class AI_AlphaBeta: # Class for calculating the best move
     def alphabeta(self, board, depth, alpha, beta):
         if depth == 0:
             self.boards_evaluated += 1
-            return self.evaluate2(board)
+            return self.evaluate3(board)
 
         moves = list(board.legal_moves)
         moves = self.order_moves(board, moves)
@@ -98,7 +99,16 @@ class AI_AlphaBeta: # Class for calculating the best move
         
                     
         return value
-                
+    
+    def evaluate3(self, board: chess.Board):
+        score = 0
+        score += heuristics.material(board, 100)
+        score += heuristics.piece_moves(board, 50)
+        score += heuristics.pawn_structure(board, 1)
+        score += heuristics.in_check(board, 1)
+        if heuristics.in_check(board, 1) > 0:
+            print("stop")
+        return score
         
 
     def test_openings(self, board):
