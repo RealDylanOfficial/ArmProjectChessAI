@@ -21,14 +21,13 @@ class AI_AlphaBeta: # Class for calculating the best move
         self.boards_evaluated = 0
 
         moves = list(board.legal_moves)
-        # print(moves)
-        # moves = self.order_moves(board, moves)
+ 
         best_move = None
 
         for move in board.legal_moves:
             board.push(move)
 
-            eval = -self.alphabeta(board, depth-1, -self.INFINITE, self.INFINITE)
+            eval = self.alphabeta(board, depth-1, -self.INFINITE, self.INFINITE)
 
             if (eval > best_eval):
                 best_eval = eval
@@ -41,28 +40,67 @@ class AI_AlphaBeta: # Class for calculating the best move
     def minimax(self, depth, board, is_maximizing):
         pass
 
-    def alphabeta(self, board, depth, alpha, beta):
+    # def alphabeta(self, board, depth, alpha, beta):
+    #     if depth == 0:
+    #         self.boards_evaluated += 1
+    #         return self.evaluate3(board)
+
+    #     moves = list(board.legal_moves)
+    #     moves = self.order_moves(board, moves)
+
+    #     if (len(moves) == 0):
+    #         return 0
+
+    #     for move in moves:
+    #         board.push(move)
+    #         eval = -self.alphabeta(board, depth-1, -beta, -alpha)
+    #         board.pop()
+
+    #         if (eval >= beta):
+    #             return beta
+    #         if (eval > alpha):
+    #             alpha = eval
+
+    #     return eval
+    
+    def alphabeta(self, board: chess.Board, depth, alpha, beta):
         if depth == 0:
-            self.boards_evaluated += 1
             return self.evaluate3(board)
 
         moves = list(board.legal_moves)
-        moves = self.order_moves(board, moves)
 
-        if (len(moves) == 0):
-            return 0
+        if len(moves) == 0:
+            return self.evaluate3(board)
 
-        for move in moves:
-            board.push(move)
-            eval = -self.alphabeta(board, depth-1, -beta, -alpha)
-            board.pop()
+        if depth % 2 == 0:  # maximising
+            eval = float("-inf")
+            for move in moves:
+                board.push(move)
+                eval = max(eval, self.alphabeta(board, depth-1, beta, alpha))  # Fix function name
+                board.pop()
 
-            if (eval >= beta):
-                return beta
-            if (eval > alpha):
-                alpha = eval
+                if eval > beta:
+                    break
+                
+                alpha = max(alpha, eval)
+            return eval
+        else:   # minimising
+            eval = float("inf")
+            for move in moves:
+                board.push(move)
+                eval = min(eval, self.alphabeta(board, depth-1, beta, alpha))  # Fix function name
+                board.pop()
+
+                if eval < alpha:
+                    break
+                
+                beta = min(beta, eval)
+            
+
 
         return eval
+
+        
 
     def evaluate(self, board):
         value = 0
@@ -106,8 +144,7 @@ class AI_AlphaBeta: # Class for calculating the best move
         score += heuristics.piece_moves(board, 50)
         score += heuristics.pawn_structure(board, 1)
         score += heuristics.in_check(board, 1)
-        if heuristics.in_check(board, 1) > 0:
-            print("stop")
+
         return score
         
 
