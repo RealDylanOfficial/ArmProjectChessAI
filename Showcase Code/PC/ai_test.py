@@ -61,12 +61,11 @@ board = [["BR", "BN", "BB", "BQ", "BK", "BB", "BN", "BR"],
     ["WP", "WP", "WP", "WP", "WP", "WP", "WP", "WP"],
     ["WR", "WN", "WB", "WQ", "WK", "WB", "WN", "WR"]]
 
-alphabeta_ai = AI_AlphaBeta(colour=True)
+alphabeta_ai = AI_AlphaBeta()
 
 if agent_type == "ai":
-  alphabeta_ai2 = AI_AlphaBeta(colour=False)
+  alphabeta_ai2 = AI_AlphaBeta()
 
-#alphabeta_ai = ai.AI_AlphaBeta()
 
 board = chess.Board(convert_to_fen(board))
 print(board)
@@ -118,11 +117,6 @@ while True:
     move = alphabeta_ai2.get_move(board, depth)
     print(move)
 
-    
-
-
-  # webserver input
-  # board = chess.Board(convert_to_fen(read_board_network()))
   
   board.push(move)
   print(board)
@@ -138,7 +132,7 @@ while True:
     print(game_state(board))
     break
 
-  
+alphabeta_ai.write_cache()
 
   # time.sleep(1)
 

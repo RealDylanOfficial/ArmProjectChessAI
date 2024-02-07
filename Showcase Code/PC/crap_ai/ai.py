@@ -1,3 +1,4 @@
+import os
 import chess
 import chess.polyglot
 from . import heuristics
@@ -9,16 +10,27 @@ from . import util
 class AI_AlphaBeta: # Class for calculating the best move
     INFINITE = 10000000
     PIECE_VALUES = [0, 100, 300, 330, 500, 900, INFINITE]
-    boards_evaluated = 0
     # piece values for second evaluation solution:
     piece_values = {"p":1, "k":10, "b":5, "r":5, "q":8, "n":4}
 
     def __init__(self, colour=None):
-        pass
+        self.cached = {}
+        try:
+            script_directory = os.path.dirname(os.path.abspath(__file__))
+            
+            with open(os.path.join(script_directory, "cached.txt"), "r") as file:
+                file_contents = file.read().splitlines()
+                for line in file_contents:
+                    input, output = line.split(":")
+                    self.cached[input] = output
+        except FileNotFoundError:
+            print("File 'cached.txt' not found.")
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
-    def get_move(self, board, depth):
+    def get_move(self, board: chess.Board, depth):
+        
         best_eval = -self.INFINITE
-        self.boards_evaluated = 0
 
         moves = list(board.legal_moves)
  
@@ -27,7 +39,7 @@ class AI_AlphaBeta: # Class for calculating the best move
         for move in board.legal_moves:
             board.push(move)
 
-            eval = self.alphabeta(board, depth-1, -self.INFINITE, self.INFINITE)
+            eval = self.alphabeta(board, depth, -self.INFINITE, self.INFINITE, False)
 
             if (eval > best_eval):
                 best_eval = eval
@@ -35,35 +47,15 @@ class AI_AlphaBeta: # Class for calculating the best move
 
             board.pop()
 
+
         return best_move
     
-    def minimax(self, depth, board, is_maximizing):
-        pass
 
-    # def alphabeta(self, board, depth, alpha, beta):
-    #     if depth == 0:
-    #         self.boards_evaluated += 1
-    #         return self.evaluate3(board)
-
-    #     moves = list(board.legal_moves)
-    #     moves = self.order_moves(board, moves)
-
-    #     if (len(moves) == 0):
-    #         return 0
-
-    #     for move in moves:
-    #         board.push(move)
-    #         eval = -self.alphabeta(board, depth-1, -beta, -alpha)
-    #         board.pop()
-
-    #         if (eval >= beta):
-    #             return beta
-    #         if (eval > alpha):
-    #             alpha = eval
-
-    #     return eval
-    
-    def alphabeta(self, board: chess.Board, depth, alpha, beta):
+    def alphabeta(self, board: chess.Board, depth, alpha, beta, maximising):
+        inputs = board.board_fen() + "," + str(depth) + "," + str(alpha) + "," + str(beta) + "," + str(maximising)
+        if inputs in self.cached:
+            return float(self.cached[inputs])
+        
         if depth == 0:
             return self.evaluate3(board)
 
@@ -72,23 +64,23 @@ class AI_AlphaBeta: # Class for calculating the best move
         if len(moves) == 0:
             return self.evaluate3(board)
 
-        if depth % 2 == 0:  # maximising
+        if maximising:  # maximising
             eval = float("-inf")
             for move in moves:
                 board.push(move)
-                eval = max(eval, self.alphabeta(board, depth-1, beta, alpha))  # Fix function name
+                eval = max(eval, self.alphabeta(board, depth-1, beta, alpha, False))  # Fix function name
                 board.pop()
 
                 if eval > beta:
                     break
                 
                 alpha = max(alpha, eval)
-            return eval
+
         else:   # minimising
             eval = float("inf")
             for move in moves:
                 board.push(move)
-                eval = min(eval, self.alphabeta(board, depth-1, beta, alpha))  # Fix function name
+                eval = min(eval, self.alphabeta(board, depth-1, beta, alpha, True))  # Fix function name
                 board.pop()
 
                 if eval < alpha:
@@ -97,7 +89,7 @@ class AI_AlphaBeta: # Class for calculating the best move
                 beta = min(beta, eval)
             
 
-
+        self.cached[inputs] = eval
         return eval
 
         
@@ -117,26 +109,6 @@ class AI_AlphaBeta: # Class for calculating the best move
 
         return value
     
-    def evaluate2(self, board: chess.Board):
-        value = 0
-        for i in range(64):
-            piece = board.piece_at(i)
-            if piece is not None:
-                if piece.color == board.turn:
-                    symbol = piece.symbol().lower()
-                    value += self.piece_values[symbol]
-                else:
-                    symbol = piece.symbol().lower()
-                    value -= self.piece_values[symbol]
-        if board.is_checkmate() and board.outcome().winner != board.turn:
-            print("test1")
-            return 100000
-        if board.is_game_over() and board.outcome().winner == board.turn or board.is_repetition():
-            print("test2")
-            return -100000
-        
-                    
-        return value
     
     def evaluate3(self, board: chess.Board):
         score = 0
@@ -146,13 +118,23 @@ class AI_AlphaBeta: # Class for calculating the best move
         score += heuristics.in_check(board, 1)
 
         return score
+    
+    def write_cache(self):
+        # with open("cached.txt", "w") as file:
+        #     for input in self.cached.keys():
+        #         file.write(input + ":" + str(self.cached[input]) + "\n")
+        try:
+            script_directory = os.path.dirname(os.path.abspath(__file__))
+
+            with open(os.path.join(script_directory, "cached.txt"), "w") as file:
+                
+                for input in self.cached.keys():
+                    file.write(input + ":" + str(self.cached[input]) + "\n")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
+                
         
-
-    def test_openings(self, board):
-        with chess.polyglot.open_reader("data/polyglot/performance.bin") as reader:
-            for entry in reader.find_all(board):
-                print(entry.move, entry.weight, entry.learn)
-
     def order_moves(self, board, moves):
         move_scores = []
 
