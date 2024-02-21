@@ -3,7 +3,7 @@ import chess
 import chess.polyglot
 from . import heuristics
 
-from . import tables
+# from . import tables
 from . import util
 
 
