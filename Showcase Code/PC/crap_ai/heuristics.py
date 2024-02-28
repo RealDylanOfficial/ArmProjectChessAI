@@ -94,15 +94,16 @@ def in_check(game: chess.Board, weight):
     else: turn = "b"
     # Check or Checkmate situations
     if turn == "w":
-        if game.is_check():
-            black_points += 1 * weight
-        elif game.is_checkmate():
+        if game.is_checkmate():
             black_points += float("inf")
+        elif game.is_check():
+            black_points += 1 * weight
     else:
-        if game.is_check():
-            black_points -= 1 * weight
-        elif game.is_checkmate():
+        if game.is_checkmate():
             black_points += float("-inf")
+        elif game.is_check():
+            black_points -= 1 * weight
+            
     return black_points
 
 # def center_squares(game, weight):
